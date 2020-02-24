@@ -736,24 +736,209 @@
 //     cout << a <<endl;
 // }
 
+// #include <iostream>
+// using namespace std;
+
+// int a = 1;
+
+// int main(){
+//     cout << a << " : " << (size_t)&a << endl;
+
+//     int a = 2;
+//     cout << a << " : " << (size_t)&a << endl;
+
+//     {
+//         int a = 3;
+//         cout << a << " : " << (size_t)&a << endl;
+//     }
+
+//     // cout << a << " : " << (size_t)&a << endl;
+//     //グローバル変数に変換
+//     cout << ::a << " : " << (size_t)&::a << endl;
+
+// }
+
+/**
+ * ファイルを超えて利用できるかどうかをリンケージという
+ * そのファイルの外部でも内部でも利用できるものは外部リンケージを持つと、そのファイルの内部でしか利用できない物は内部リンケージと呼ぶ
+ * externのついた変数宣言を行うと、別の場所で定義された外部リンケージのグローバル変数を扱うという宣言になる
+ * staticなしの関数プロトタイプを書くと別の場所で定義された外部リンケージの関数を扱うという宣言になる
+ * staticをつけると内部リンケージになる*/
+
+// //extern1.cpp
+// #include <iostream>
+// using namespace std;
+
+// int a = 2; //aの実態
+
+// void Func(){ //Funcの実態
+//     cout << "a = " << a << endl;
+// }
+
+// //extern2.cpp
+// extern int a;  //extern1.cppのaを参照
+// void Func();   //extern1.cppのFuncの拡張
+
+// int main(){ //a = 2を出している
+//     Func();
+//     a = 5;
+//     Func();
+// }
+
+//Internal1.cpp
+// #include <iostream>
+// using namespace std;
+
+// static int a = 2;
+
+// static void Func1(){
+//     cout << "a(1) = " << a << endl;
+// }
+
+// void Func2(){
+//     Func1();
+// }
+
+// //Internal2.cpp
+// #include <iostream>
+// using namespace std;
+
+// static int a = 9;
+
+// void Func1(){
+//     cout << "a(2) = " << a << endl;
+// }
+
+// void Func2();
+
+// int main(){
+//     Func1();
+//     Func2();
+//     a = 5;
+//     Func1();
+//     Func2();
+// }
+
+
+/**
+ * ファイルを新規作成すればそれだけで複数ソースの出来上がり
+ * あるソース・ファイルで作った関数を公開したいときはヘッダファイルを作ると良い
+ * const定数は内部リンケージを持つ
+ * ヘッダファイルには必ず二重インクルード防止コードを書く*/
+
+// #ifndef "マクロ名"
+// #define "マクロ名"
+
+// //ここに宣言を書く
+
+// #endif
+
+/**
+ * ""で囲んだ文字列のことを文字列リテラルという
+ * 文字列リテラルはそのアドレスを返す
+ * 文字列リテラルは静的であり、そして書き換えてはならない
+ * ポインタを文字列リテラルで初期化すると、文字列リテラルへのアドレスで初期化される
+ * 配列を文字列リテラルで初期化された場合、その配列がその文字列リテラルの内容で初期化される*/
+
+// #include <iostream>
+// using namespace std;
+
+// enum CompareResult{
+//     CR_LESS_THEN = 0,  //より小さい
+//     CR_EQUAL_TO = 1,   //等しい
+//     CR_GREATER_THAN = 2,  //より大きい
+// };
+
+// CompareResult Compare(int a ,int b){
+//     return 
+//         a < b ? CR_LESS_THEN:
+//         a > b ? CR_GREATER_THAN:
+//             CR_EQUAL_TO;
+// }
+
+// bool Compare(){
+//     const char* messages[] = {
+//         "前者は後者より小さいです",
+//         "両者は等しいです",
+//         "前者は後者よりお起きです",
+//     };
+
+//     int a , b;
+
+//     cout << "数字を２つ入力してください" << flush;
+//     cin >> a >> b;
+
+//     if(a == -1){
+//     return false;
+//     }
+
+//     cout << messages[Compare(a, b)] << endl;
+
+//     return true;
+// }
+
+// int main(){
+//     while (Compare())
+//     {
+//         /*何もしない*/
+//     }
+// }
+
+/**
+ * ¥から始まる特殊な文字表記をエス・ケープシーケンスという。
+ * エスケープシーケンスを使うと特殊な文字の文字コードや数値を表現できる
+ * エスケープシーケンスはソース・ファイル上でのみ必要と夏物であり、コンパイルあとは対応する文字コードに変換させる*/
+
+// //改行のコードを取得
+// char ch = '
+// ';
+
+// //バックスペースの文字コードを取得
+// char ch = ';
+
+// #include <iostream>
+// #include <cstdio>
+// using namespace std;
+
+// //文字コードを16進数で表示
+// void DumpCode(const char* str){
+//     for(int i = 0; str[i] != '¥0'; ++i){
+//         printf("%02", (unsigned char)str[i]);
+//     }
+//     cout << endl;
+// }
+
+// int main(){
+//     DumpCode("¥¥'¥?¥¥");
+// }
+
 #include <iostream>
 using namespace std;
 
-int a = 1;
+void CalcMultiples(int* array, int size, int n){
+    for(int i = 0; i < size; ++i){
+        array[i] = n * (i + 1);
+    }
+}
+
+void ShowArray(const int* array, int size){
+    for(int i = 0; i < size; ++i){
+        cout << array[i] << ' ';
+    }
+    cout << endl;
+}
 
 int main(){
-    cout << a << " : " << (size_t)&a << endl;
+    int* array;
+    int size;
 
-    int a = 2;
-    cout << a << " : " << (size_t)&a << endl;
+    cout << "どこまで計算しますか" << flush;
+    cin >> size;
 
-    {
-        int a = 3;
-        cout << a << " : " << (size_t)&a << endl;
-    }
+    array = new int[size];
 
-    // cout << a << " : " << (size_t)&a << endl;
-    //グローバル変数に変換
-    cout << ::a << " : " << (size_t)&::a << endl;
+    CalcMultiples(array, size, 3);
+    ShowArray(array, size);
 
+    delete[] array;
 }
