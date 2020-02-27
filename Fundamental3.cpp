@@ -144,3 +144,28 @@ class IntArray {
     //配列
     int m_array[INTARRAY_SIZE];
 };
+
+/**
+ * 変数の寿命が来ると自動的にデストラクタが呼ばれる
+ * デストラクタはクラス名の前にチルダ〜のついた名前の関数である
+ * デストラクタには戻り地がない
+ * コンストラクタ；デストラクタの機構はメモリリークを防ぐのに便利*/
+
+class IntArray{
+    public:
+    //コンストラクタ
+    IntArray(int size);
+
+    public:
+    //メンバへのアクセス関数
+    int Get(int i);
+    void Set(int i, int value);
+
+    private:
+    //インデックスのチェック
+    void CheckIndex(int i);
+
+    private:
+    int* m_array; //動的配列
+    int m_size; //配列の要素数
+}
